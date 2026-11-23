@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Mi autómata | Simulador AFD{% endblock %}
+{% block content %}
+<section class="page-header"><span class="eyebrow">MÓDULO 01</span><h1>Autómata construido correctamente</h1><p>Consulta la definición matemática, las transiciones y el diagrama de tu AFD.</p></section>
+
+<section class="panel form-section">
+    <div class="section-title"><span class="step-number">01</span><div><h2>Definición formal del AFD</h2><p>Representación mediante la quíntupla matemática.</p></div></div>
+    <div class="tuple-box"><h3>M = (Q, Σ, δ, q0, F)</h3><div class="tuple-grid">
+        <div class="tuple-item"><span>Q</span><strong>{{ afd.estados | join(", ") }}</strong><small>Conjunto de estados</small></div>
+        <div class="tuple-item"><span>Σ</span><strong>{{ afd.alfabeto | join(", ") }}</strong><small>Alfabeto</small></div>
+        <div class="tuple-item"><span>q0</span><strong>{{ afd.estado_inicial }}</strong><small>Estado inicial</small></div>
+        <div class="tuple-item"><span>F</span><strong>{% if afd.estados_finales %}{{ afd.estados | select("in", afd.estados_finales) | join(", ") }}{% else %}∅{% endif %}</strong><small>Estados finales</small></div>
+        <div class="tuple-item tuple-wide"><span>δ</span><strong>Función de transición completa</strong><small>Consulta la tabla y el diagrama.</small></div>
+    </div></div>
+</section>
+
+<section class="panel form-section">
+    <div class="section-title"><span class="step-number">02</span><div><h2>Tabla de transiciones</h2><p>Destino de cada estado al leer un símbolo.</p></div></div>
+    <div class="table-responsive"><table class="transition-table"><thead><tr><th>Estado</th>{% for simbolo in afd.alfabeto %}<th>{{ simbolo }}</th>{% endfor %}</tr></thead><tbody>
+    {% for estado in afd.estados %}<tr><th>{{ estado }}{% if estado == afd.estado_inicial %}<span class="state-tag">Inicial</span>{% endif %}{% if estado in afd.estados_finales %}<span class="state-tag final-tag">Final</span>{% endif %}</th>{% for simbolo in afd.alfabeto %}<td>{{ afd.transiciones[(estado, simbolo)] }}</td>{% endfor %}</tr>{% endfor %}
+    </tbody></table></div>
+</section>
+
+<section class="panel form-section">
+    <div class="section-title"><span class="step-number">03</span><div><h2>Diagrama de estados</h2><p>Flecha de inicio, estados finales, transiciones y bucles.</p></div></div>
+    <div class="graph-legend"><span><i class="legend-circle"></i> Estado normal</span><span><i class="legend-circle legend-final"></i> Estado final</span><span>→ Estado inicial</span></div>
+    <div id="afd-graph" class="graph-canvas" data-graph='{{ datos_grafo | tojson }}'></div>
+    <details class="dot-details"><summary>Ver descripción DOT generada</summary><pre class="graph-code">{{ grafico_dot }}</pre></details>
+</section>
+
+<section class="status-panel"><div><span class="eyebrow">AUTÓMATA ACTIVO</span><h3>Tu AFD está listo</h3><p class="status-active">Los módulos 2 y 3 pueden utilizarlo.</p></div>
+<form method="POST" action="{{ url_for('main.limpiar') }}"><button type="submit" class="btn btn-outline">Eliminar autómata</button></form></section>
+
+<section class="module-grid module-grid-actions">
+    <article class="module-card"><div class="module-icon">02</div><h3>Palabras reconocidas</h3><p>Busca las cinco palabras reconocidas más cortas.</p><a href="{{ url_for('main.modulo2') }}">Ir al módulo 2 →</a></article>
+    <article class="module-card"><div class="module-icon">03</div><h3>Probar palabras</h3><p>Comprueba si una palabra pertenece al lenguaje.</p><a href="{{ url_for('main.modulo3') }}">Ir al módulo 3 →</a></article>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/grafo.js') }}"></script>{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Inicio | Simulador AFD{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <span class="eyebrow">PROYECTO DE ESTRUCTURAS DISCRETAS</span>
+        <h1>Simulador de<br><span>Autómatas Finitos Deterministas</span></h1>
+        <p>Construye autómatas, visualiza sus transiciones y comprueba cómo procesan palabras mediante la teoría de lenguajes formales.</p>
+        <a href="{{ url_for('main.construir') }}" class="btn btn-primary">Comenzar a construir →</a>
+    </div>
+    <div class="hero-symbol">
+        <div class="automata-preview">
+            <div class="preview-arrow">→</div>
+            <div class="preview-state final-state">q0</div>
+            <div class="preview-line">0</div>
+            <div class="preview-state">q1</div>
+            <div class="preview-loop">1 ↻</div>
+        </div>
+        <span>Representación conceptual de un AFD</span>
+    </div>
+</section>
+
+<section class="section-heading">
+    <span class="eyebrow">HERRAMIENTAS DEL SIMULADOR</span>
+    <h2>Explora los tres módulos</h2>
+    <p>Cada módulo trabaja sobre el mismo autómata construido.</p>
+</section>
+
+<section class="module-grid">
+    <article class="module-card"><div class="module-icon">01</div><h3>Construcción del AFD</h3><p>Define estados, alfabeto, transiciones, estado inicial y estados finales.</p><a href="{{ url_for('main.construir') }}">Construir autómata →</a></article>
+    <article class="module-card"><div class="module-icon">02</div><h3>Palabras reconocidas</h3><p>Encuentra las cinco palabras reconocidas más cortas y sus recorridos.</p><a href="{{ url_for('main.modulo2') }}">Consultar palabras →</a></article>
+    <article class="module-card"><div class="module-icon">03</div><h3>Probar palabras</h3><p>Introduce palabras y comprueba aceptación, rechazo o símbolos inválidos.</p><a href="{{ url_for('main.modulo3') }}">Probar una palabra →</a></article>
+</section>
+
+<section class="status-panel">
+    <div><span class="eyebrow">ESTADO DEL PROYECTO</span><h3>Autómata activo</h3>
+    {% if afd %}<p class="status-active">Hay un autómata cargado en memoria.</p>
+    {% else %}<p class="status-inactive">Todavía no has construido un autómata.</p>{% endif %}</div>
+    {% if afd %}<a href="{{ url_for('main.automata') }}" class="btn btn-secondary">Ver autómata</a>
+    {% else %}<a href="{{ url_for('main.construir') }}" class="btn btn-primary">Crear mi primer AFD</a>{% endif %}
+</section>
+{% endblock %}

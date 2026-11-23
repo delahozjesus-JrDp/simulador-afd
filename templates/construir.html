@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Construir AFD | Simulador{% endblock %}
+{% block content %}
+<section class="page-header"><span class="eyebrow">MÓDULO 01</span><h1>Construcción del autómata</h1><p>Define los cinco componentes matemáticos del AFD.</p></section>
+
+<form method="POST" action="{{ url_for('main.construir') }}" id="form-afd">
+    <section class="panel form-section">
+        <div class="section-title"><span class="step-number">01</span><div><h2>Conjunto de estados (Q)</h2><p>Ingresa los nombres separados por comas.</p></div></div>
+        <label for="estados">Estados</label>
+        <input type="text" id="estados" name="estados" placeholder="Ejemplo: q0, q1, q2" required>
+        <small>Los nombres deben ser únicos.</small>
+    </section>
+
+    <section class="panel form-section">
+        <div class="section-title"><span class="step-number">02</span><div><h2>Alfabeto (Σ)</h2><p>Ingresa símbolos separados por comas.</p></div></div>
+        <label for="alfabeto">Símbolos</label>
+        <input type="text" id="alfabeto" name="alfabeto" placeholder="Ejemplo: 0, 1" required>
+        <small>Cada símbolo debe tener exactamente un carácter.</small>
+    </section>
+
+    <section class="panel form-section">
+        <div class="section-title"><span class="step-number">03</span><div><h2>Estado inicial (q0)</h2><p>Selecciona dónde comienza el procesamiento.</p></div></div>
+        <label for="estado_inicial">Estado inicial</label>
+        <select id="estado_inicial" name="estado_inicial" required><option value="">Primero ingresa los estados</option></select>
+    </section>
+
+    <section class="panel form-section">
+        <div class="section-title"><span class="step-number">04</span><div><h2>Estados finales (F)</h2><p>Selecciona los estados de aceptación.</p></div></div>
+        <div id="contenedor-finales" class="final-states"><p class="empty-message">Primero ingresa los estados.</p></div>
+        <small>Puedes dejar todos sin seleccionar si F es vacío.</small>
+    </section>
+
+    <section class="panel form-section">
+        <div class="section-title"><span class="step-number">05</span><div><h2>Función de transición (δ)</h2><p>Define el destino para cada combinación de estado y símbolo.</p></div></div>
+        <div class="table-actions"><button type="button" class="btn btn-secondary" id="generar-tabla">Generar tabla de transiciones</button></div>
+        <div id="contenedor-transiciones" class="table-responsive"><p class="empty-message">Ingresa los estados y alfabeto para generar la tabla.</p></div>
+    </section>
+
+    <div class="form-actions"><a href="{{ url_for('main.inicio') }}" class="btn btn-outline">Cancelar</a><button type="submit" class="btn btn-primary">Validar y construir AFD</button></div>
+</form>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/construir.js') }}"></script>{% endblock %}

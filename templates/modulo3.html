@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Probar palabras | Simulador AFD{% endblock %}
+{% block content %}
+<section class="page-header"><span class="eyebrow">MÓDULO 03</span><h1>Reconocimiento de palabras</h1><p>Introduce una palabra para conocer el resultado y el recorrido por los estados.</p></section>
+
+<section class="panel form-section">
+    <div class="section-title"><span class="step-number">03</span><div><h2>Ingresar palabra</h2><p>Deja el campo vacío para probar la palabra vacía ε.</p></div></div>
+    <form method="POST" action="{{ url_for('main.modulo3') }}" class="word-form">
+        <label for="palabra">Palabra de entrada</label>
+        <input type="text" id="palabra" name="palabra" value="{{ palabra if palabra is not none else '' }}" placeholder="Ejemplo: 1001" autocomplete="off">
+        <small>No agregues espacios antes o después; cada carácter se evalúa como un símbolo.</small>
+        <button type="submit" class="btn btn-primary">Procesar palabra</button>
+    </form>
+</section>
+
+{% if resultado %}
+<section class="panel form-section">
+    <div class="section-title"><span class="step-number">R</span><div><h2>Resultado del reconocimiento</h2><p>Evaluación de la palabra ingresada.</p></div></div>
+    {% if resultado.motivo == "simbolo_invalido" %}
+        <div class="result-banner rejected"><h3>Símbolo fuera del alfabeto</h3><p>El símbolo <strong>{{ resultado.simbolo_invalido }}</strong> no pertenece a Σ. Posición: <strong>{{ resultado.posicion }}</strong>.</p></div>
+    {% elif resultado.aceptada %}
+        <div class="result-banner accepted"><h3>Palabra aceptada</h3><p>El procesamiento terminó en un estado final.</p></div>
+    {% else %}
+        <div class="result-banner rejected"><h3>Palabra rechazada</h3><p>El procesamiento terminó en un estado que no pertenece a F.</p></div>
+    {% endif %}
+    <div class="walk-box">
+        <h3>Recorrido del autómata</h3>
+        {% if palabra == "" %}<p>Palabra evaluada: <strong>ε (vacía)</strong></p>{% else %}<p>Palabra evaluada: <code>{{ palabra }}</code></p>{% endif %}
+        <div class="walk-states">{% for estado in resultado.recorrido %}<span class="walk-state">{{ estado }}</span>{% if not loop.last %}<span class="walk-arrow">→</span>{% endif %}{% endfor %}</div>
+        <p>Último estado alcanzado: <strong>{{ resultado.estado_final }}</strong></p>
+    </div>
+</section>
+{% endif %}
+
+<section class="panel form-section">
+    <div class="section-title"><span class="step-number">H</span><div><h2>Historial de pruebas</h2><p>Se conserva en la sesión actual del navegador.</p></div></div>
+    {% if historial %}
+    <div class="table-responsive"><table class="data-table"><thead><tr><th>Palabra</th><th>Resultado</th><th>Recorrido</th></tr></thead><tbody>
+    {% for item in historial %}<tr><td>{% if item.palabra == "" %}ε{% else %}<code>{{ item.palabra }}</code>{% endif %}</td><td>{% if item.motivo == "simbolo_invalido" %}<span class="result-pill rejected">Símbolo inválido</span>{% elif item.aceptada %}<span class="result-pill accepted">Aceptada</span>{% else %}<span class="result-pill rejected">Rechazada</span>{% endif %}</td><td>{{ item.recorrido | join(" → ") }}</td></tr>{% endfor %}
+    </tbody></table></div>
+    <form method="POST" action="{{ url_for('main.limpiar_historial') }}" class="form-actions"><button class="btn btn-outline" type="submit">Limpiar historial</button></form>
+    {% else %}<p class="empty-message">Todavía no has probado palabras.</p>{% endif %}
+</section>
+{% endblock %}

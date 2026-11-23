@@ -1,0 +1,1 @@
+No se requiere biblioteca gráfica externa. El diagrama SVG se dibuja con JavaScript local en static/js/grafo.js.

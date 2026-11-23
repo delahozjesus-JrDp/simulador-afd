@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Palabras reconocidas | Simulador AFD{% endblock %}
+{% block content %}
+<section class="page-header"><span class="eyebrow">MÓDULO 02</span><h1>Cinco palabras reconocidas más cortas</h1><p>Se ordenan primero por longitud y después por el orden de los símbolos del alfabeto ingresado. Longitud máxima: 10.</p></section>
+
+<section class="panel form-section">
+    <div class="section-title"><span class="step-number">02</span><div><h2>Resultados de la búsqueda</h2><p>Las palabras se verifican utilizando el mismo procedimiento de reconocimiento del módulo 3.</p></div></div>
+    {% if palabras %}
+    <div class="word-list">
+        {% for item in palabras %}
+        <article class="word-result">
+            <div class="word-number">{{ loop.index }}</div>
+            <div class="word-content">
+                <h3>{% if item.palabra == "" %}ε <small>(palabra vacía)</small>{% else %}<code>{{ item.palabra }}</code>{% endif %}</h3>
+                <p>Recorrido: <strong>{{ item.recorrido | join(" → ") }}</strong></p>
+                <p>Estado final: <strong>{{ item.estado_final }}</strong></p>
+            </div>
+            <span class="result-pill accepted">Aceptada</span>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><h3>No se encontraron palabras reconocidas</h3><p>Puede que el lenguaje sea vacío desde el estado inicial o que no existan palabras aceptadas hasta longitud 10.</p></div>
+    {% endif %}
+</section>
+<div class="form-actions"><a href="{{ url_for('main.automata') }}" class="btn btn-outline">Volver al autómata</a><a href="{{ url_for('main.modulo3') }}" class="btn btn-primary">Probar palabras →</a></div>
+{% endblock %}

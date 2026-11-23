@@ -1,0 +1,28 @@
+{
+  "par_de_ceros": {
+    "estados": ["q0", "q1"],
+    "alfabeto": ["0", "1"],
+    "estado_inicial": "q0",
+    "estados_finales": ["q0"],
+    "transiciones": {
+      "q0,0": "q1",
+      "q0,1": "q0",
+      "q1,0": "q0",
+      "q1,1": "q1"
+    }
+  },
+  "termina_en_ab": {
+    "estados": ["s0", "s1", "s2"],
+    "alfabeto": ["a", "b"],
+    "estado_inicial": "s0",
+    "estados_finales": ["s2"],
+    "transiciones": {
+      "s0,a": "s1",
+      "s0,b": "s0",
+      "s1,a": "s1",
+      "s1,b": "s2",
+      "s2,a": "s1",
+      "s2,b": "s0"
+    }
+  }
+}
